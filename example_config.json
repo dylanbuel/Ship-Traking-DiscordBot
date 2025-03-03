@@ -1,4 +1,5 @@
 {
     "API_KEY":"APIKEY",
-    "SHIP_MMSI":["array","of","ships"]
+    "SHIP_MMSI":["array","of","ships"],
+    "WEB_HOOK":"https://discord.com/api/webhooks/EXAMPLE"
 }

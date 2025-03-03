@@ -2,6 +2,7 @@ import asyncio
 import websockets
 import json
 from datetime import datetime, timezone
+from discord_webhook import DiscordWebhook
 
 AIS_NAV_STATUS =[
     "underway using engine",
@@ -42,13 +43,17 @@ async def connect_ais_stream(config):
             if message_type == "PositionReport":
                 # the message parameter contains a key of the message type which contains the message itself
                 ais_message = message['Message']['PositionReport']
-                print(f"[{datetime.now(timezone.utc)}] ShipId: {ais_message['UserID']} Status: {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} Latitude: {ais_message['Latitude']} Latitude: {ais_message['Longitude']}" )
-                print(f"https://www.google.com/maps/place/@{ais_message['Latitude']},{ais_message['Longitude']},12.96z")
+                printtext = f"[{datetime.now(timezone.utc)}] ShipId: {ais_message['UserID']} Status: {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} Latitude: {ais_message['Latitude']} Latitude: {ais_message['Longitude']}" 
+                print(printtext)
             elif message_type == "ShipStaticData":
                 ais_message = message['Message']['ShipStaticData']
-                print(f"[{datetime.now(timezone.utc)}] Destination: {ais_message['Destination']} \n ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}")
+                printtext = f"[{datetime.now(timezone.utc)}] Destination: {ais_message['Destination']} ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
             else:
-                print(message)
+                printtext = message
+
+            print(f"https://www.google.com/maps/place/@{ais_message['Latitude']},{ais_message['Longitude']},12.96z")
+            webhook = DiscordWebhook(url=config["WEB_HOOK"], content=printtext)
+            webhook.execute()
 
 
 if __name__ == "__main__":
