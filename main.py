@@ -27,6 +27,12 @@ def getconfig():
 
 async def connect_ais_stream(config):
 
+    print("Setting up Discord webhooks")
+    pos_discord_webhook = DiscordWebhook(url=config["WEB_HOOK"], content="Waiting for PositionReport")
+    pos_discord_webhook.execute()
+    static_discord_webhook = DiscordWebhook(url=config["WEB_HOOK"], content="Waiting for ShipStaticData")
+    static_discord_webhook.execute()
+
     async with websockets.connect("wss://stream.aisstream.io/v0/stream") as websocket:
         subscribe_message = {"APIKey": config["API_KEY"],  # Required !
                              "BoundingBoxes": [[[-90, -180], [90, 180]]], # Required!
@@ -43,17 +49,20 @@ async def connect_ais_stream(config):
             if message_type == "PositionReport":
                 # the message parameter contains a key of the message type which contains the message itself
                 ais_message = message['Message']['PositionReport']
-                printtext = f"[{datetime.now(timezone.utc)}] ShipId: {ais_message['UserID']} Status: {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} Latitude: {ais_message['Latitude']} Latitude: {ais_message['Longitude']}" 
-                print(printtext)
+                pos_printtext = f"[{datetime.now(timezone.utc)}] ShipId: {ais_message['UserID']} Status: {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} Latitude: {ais_message['Latitude']} Latitude: {ais_message['Longitude']}"                 
+                pos_discord_webhook.content = pos_printtext
+                pos_discord_webhook.edit()
+                print(pos_printtext)
             elif message_type == "ShipStaticData":
                 ais_message = message['Message']['ShipStaticData']
-                printtext = f"[{datetime.now(timezone.utc)}] Destination: {ais_message['Destination']} ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
+                static_printtext = f"[{datetime.now(timezone.utc)}] Destination: {ais_message['Destination']} ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
+                static_printtext.content = pos_printtext
+                static_printtext.edit()
+                print(static_printtext)
             else:
-                printtext = message
+                other_printtext = message
+                print(other_printtext)
 
-            print(f"https://www.google.com/maps/place/@{ais_message['Latitude']},{ais_message['Longitude']},12.96z")
-            webhook = DiscordWebhook(url=config["WEB_HOOK"], content=printtext)
-            webhook.execute()
 
 
 if __name__ == "__main__":
