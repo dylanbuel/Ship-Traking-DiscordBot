@@ -55,7 +55,7 @@ async def connect_ais_stream(config):
                 print(pos_printtext)
             elif message_type == "ShipStaticData":
                 ais_message = message['Message']['ShipStaticData']
-                static_printtext = f"[{datetime.now(timezone.utc)}] Destination: {ais_message['Destination']} ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
+                static_printtext = f"[{datetime.now(timezone.utc)}] Name: {ais_message['Name']} Destination: {ais_message['Destination']} ETA: Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
                 static_discord_webhook.content = static_printtext
                 static_discord_webhook.edit()
                 print(static_printtext)
