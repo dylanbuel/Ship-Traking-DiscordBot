@@ -8,6 +8,7 @@ AIS_NAV_STATUS =[
     "underway using engine",
     "at anchor",
     "not under command",
+    "constrained by her draught",
     "restricted maneuverability",
     "moored",
     "aground",
