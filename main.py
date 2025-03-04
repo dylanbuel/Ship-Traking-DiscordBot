@@ -2,7 +2,6 @@ import asyncio
 import websockets
 import json
 import time
-from datetime import datetime, timezone
 from discord_webhook import DiscordWebhook
 
 AIS_NAV_STATUS =[
