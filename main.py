@@ -56,7 +56,7 @@ async def connect_ais_stream(config):
             if message_type == "PositionReport":
                 # the message parameter contains a key of the message type which contains the message itself
                 ais_message = message['Message']['PositionReport']
-                pos_printtext = f"{getdiscordtimestamp()} **ShipId:** {ais_message['UserID']} **Status:** {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} **Latitude:** {ais_message['Latitude']} **Latitude:** {ais_message['Longitude']}"
+                pos_printtext = f"{getdiscordtimestamp()} **ShipId:** {ais_message['UserID']} **Status:** {AIS_NAV_STATUS[ais_message['NavigationalStatus']]} **Latitude:** {ais_message['Latitude']} **Longitude:** {ais_message['Longitude']}"
                 print(pos_printtext)
                 pos_printtext = pos_printtext + "\n" + f"https://www.google.com/maps/place/@{ais_message['Latitude']},{ais_message['Longitude']},12.96z"
             elif message_type == "ShipStaticData":
