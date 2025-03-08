@@ -61,7 +61,7 @@ async def connect_ais_stream(config):
                 pos_printtext = pos_printtext + "\n" + f"https://www.google.com/maps/place/@{ais_message['Latitude']},{ais_message['Longitude']},12.96z"
             elif message_type == "ShipStaticData":
                 ais_message = message['Message']['ShipStaticData']
-                static_printtext = f"{getdiscordtimestamp()} **Name:** {ais_message['Name']} **Destination:** {ais_message['Destination']} **ETA:** Day:{ais_message['Eta']['Day']} Hour:{ais_message['Eta']['Hour']} Minute:{ais_message['Eta']['Minute']}"
+                static_printtext = f"{getdiscordtimestamp()} **Name:** {ais_message['Name']} **Destination:** {ais_message['Destination']} **ETA:** {ais_message['Eta']['Month']}/{ais_message['Eta']['Day']} {ais_message['Eta']['Hour']:02d}:{ais_message['Eta']['Minute']:02d}"
                 print(static_printtext)
             else:
                 other_printtext = message
